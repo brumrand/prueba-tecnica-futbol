@@ -1,0 +1,4 @@
+- Haceis bastante incapié en el tema del desarrollo del login y registro, 
+    por lo cual entiendo que debe ser un desarrollo porpio y no una implementación de una utilidad facilitada por el framework.
+- Por otro lado en la documentación en pdf indicais que hay un endpoint especifico para obtener la data de los estadios sin embargo dicha data ya está presnte en el endpoint de equipos, 
+    quereis que se haga la llamada a parte o ya se integra con una sola llamada.
