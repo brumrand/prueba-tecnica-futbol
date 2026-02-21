@@ -18,6 +18,7 @@ const MatchesList: React.FC<MatchesListProps> = ({ matches }) => {
 
     return (
         <div className="space-y-4">
+            <h2 className='w-full text-center font-bold'>Matches</h2>
             {matches.map(match => (
                 <div key={match.id} className="border rounded-lg p-4">
                     {/* HEADER */}

@@ -26,6 +26,7 @@ const FavoriteTeams: React.FC<FavoriteTeamsProps> = ({ teams }) => {
 
     return (
         <div className="space-y-4">
+            <h2 className='w-full text-center font-bold'>Favorite Teams</h2>
             {teams.map((team) => (
                 <div key={team.id} className="border rounded-lg p-4">
                     <div className="flex items-center">
