@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Domain\Dtos;
+namespace App\Domain\DTOs;
 
-final readonly class TeamDto
+final readonly class TeamDTO
 {
     public function __construct(
         public int $id,

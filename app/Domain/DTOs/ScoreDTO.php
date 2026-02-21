@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Domain\Dtos;
+namespace App\Domain\DTOs;
 
-final readonly class ScoreSideDto
+final readonly class ScoreSideDTO
 {
     public function __construct(
         public ?int $home,

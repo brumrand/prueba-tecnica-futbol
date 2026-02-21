@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Dtos;
+namespace App\Domain\DTOs;
 
 final readonly class PeriodsDTO
 {

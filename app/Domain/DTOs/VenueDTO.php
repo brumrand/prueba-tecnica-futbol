@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Domain\Dtos;
+namespace App\Domain\DTOs;
 
 
-final readonly class VenueDto
+final readonly class VenueDTO
 {
     public function __construct(
         public int $id,
