@@ -2,8 +2,8 @@
 
 namespace App\External\FootBallApi\Mappers;
 
-use App\External\FootBallApi\DTOs\TeamDTO;
-use App\External\FootBallApi\DTOs\VenueDTO;
+use App\Domain\DTOs\TeamDTO;
+use App\Domain\DTOs\VenueDTO;
 
 final class TeamMapper
 {

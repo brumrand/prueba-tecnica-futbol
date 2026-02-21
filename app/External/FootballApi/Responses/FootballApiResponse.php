@@ -6,6 +6,7 @@ final readonly class FootballApiResponse
 {
     public function __construct(
         public bool $success,
+        public bool $hasData,
         public int $httpStatus,
         public array $data,
         public array $errors,

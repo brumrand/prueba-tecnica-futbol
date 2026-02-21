@@ -2,7 +2,7 @@
 
 namespace App\External\FootBallApi\Mappers;
 
-use App\External\FootBallApi\DTOs\{
+use App\Domain\DTOs\{
     MatchDTO,
     FixtureDTO,
     PeriodsDTO,
@@ -16,7 +16,7 @@ use App\External\FootBallApi\DTOs\{
     ScoreSideDTO
 };
 
-final class FixtureMapper
+final class MatchMapper
 {
     /**
      * @return MatchDTO[]

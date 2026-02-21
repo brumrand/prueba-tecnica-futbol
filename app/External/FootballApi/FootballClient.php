@@ -51,6 +51,7 @@ final class FootballClient
 
             return new FootballApiResponse(
                 success: false,
+                hasData: false,
                 httpStatus: $e->response?->status() ?? 0,
                 data: [],
                 errors: ['transport_error'],
@@ -62,9 +63,11 @@ final class FootballClient
     private function mapResponse(Response $response): FootballApiResponse
     {
         $json = $response->json() ?? [];
+        $hasData = $response->status() !== 204 && isset($json['response']) && count($json['response']) > 0;
 
         return new FootballApiResponse(
             success: $response->successful() && empty($json['errors']),
+            hasData: $hasData,
             httpStatus: $response->status(),
             data: $json['response'] ?? [],
             errors: $json['errors'] ?? [],
