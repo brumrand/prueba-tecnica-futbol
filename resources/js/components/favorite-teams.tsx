@@ -1,6 +1,8 @@
 
 import React, { useState } from 'react';
+import { useForm } from '@inertiajs/react';
 import { Team } from '@/types/team';
+import { Button } from '@/components/ui/button';
 
 interface FavoriteTeamsProps {
     teams: Team[];
@@ -8,9 +10,14 @@ interface FavoriteTeamsProps {
 
 const FavoriteTeams: React.FC<FavoriteTeamsProps> = ({ teams }) => {
     const [expandedTeam, setExpandedTeam] = useState<number | null>(null);
+    const { delete: unfavorite, processing } = useForm();
 
     const handleToggle = (teamId: number) => {
         setExpandedTeam(expandedTeam === teamId ? null : teamId);
+    };
+
+    const handleUnfavorite = (teamId: number) => {
+        unfavorite(route('favorite-teams.destroy', { teamId }));
     };
 
     if (teams.length === 0) {
@@ -21,12 +28,21 @@ const FavoriteTeams: React.FC<FavoriteTeamsProps> = ({ teams }) => {
         <div className="space-y-4">
             {teams.map((team) => (
                 <div key={team.id} className="border rounded-lg p-4">
-                    <div
-                        className="flex items-center cursor-pointer"
-                        onClick={() => handleToggle(team.id)}
-                    >
-                        <img src={team.logo} alt={team.name} className="w-8 h-8 mr-4" />
-                        <h3 className="text-lg font-semibold">{team.name}</h3>
+                    <div className="flex items-center">
+                        <div
+                            className="flex items-center cursor-pointer flex-grow"
+                            onClick={() => handleToggle(team.id)}
+                        >
+                            <img src={team.logo} alt={team.name} className="w-8 h-8 mr-4" />
+                            <h3 className="text-lg font-semibold">{team.name}</h3>
+                        </div>
+                        <Button
+                            variant="destructive"
+                            onClick={() => handleUnfavorite(team.id)}
+                            disabled={processing}
+                        >
+                            Remove
+                        </Button>
                     </div>
                     {expandedTeam === team.id && (
                         <div className="mt-4 space-y-2">
@@ -44,3 +60,7 @@ const FavoriteTeams: React.FC<FavoriteTeamsProps> = ({ teams }) => {
 };
 
 export default FavoriteTeams;
+
+function route(arg0: string, arg1: { teamId: number; }): string {
+    throw new Error('Function not implemented.');
+}
