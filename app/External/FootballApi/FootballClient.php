@@ -1,0 +1,79 @@
+<?php
+
+namespace App\External\FootBallApi;
+
+use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Client\Response;
+use Illuminate\Http\Client\RequestException;
+use App\External\FootBallApi\Responses\FootballApiResponse;
+final class FootballClient
+{
+    private string $baseUrl;
+    private string $apiKey;
+
+    public function __construct()
+    {
+        $this->baseUrl = config('services.football_api.base_url');
+        $this->apiKey  = config('services.football_api.key');
+    }
+
+    public function getTeamsByName(string $name): FootballApiResponse
+    {
+        return $this->get('teams', ['name' => $name]);
+    }
+
+    public function getTeamById(int $teamId): FootballApiResponse
+    {
+        return $this->get('teams', ['id' => $teamId]);
+    }
+
+    public function getFixtures(array $queryParams = []): FootballApiResponse
+    {
+        return $this->get('fixtures', $queryParams);
+    }
+
+    private function get(string $endpoint, array $queryParams = []): FootballApiResponse
+    {
+        try {
+            $response = Http::baseUrl($this->baseUrl)
+                ->withHeaders([
+                    'x-apisports-key' => $this->apiKey,
+                    'Accept'          => 'application/json',
+                ])
+                ->timeout(10)
+                ->retry(2, 200)
+                ->get($endpoint, $queryParams);
+
+            return $this->mapResponse($response);
+
+        } catch (RequestException $e) {
+            report($e);
+
+            return new FootballApiResponse(
+                success: false,
+                httpStatus: $e->response?->status() ?? 0,
+                data: [],
+                errors: ['transport_error'],
+                meta: []
+            );
+        }
+    }
+
+    private function mapResponse(Response $response): FootballApiResponse
+    {
+        $json = $response->json() ?? [];
+
+        return new FootballApiResponse(
+            success: $response->successful() && empty($json['errors']),
+            httpStatus: $response->status(),
+            data: $json['response'] ?? [],
+            errors: $json['errors'] ?? [],
+            meta: [
+                'get'        => $json['get']        ?? null,
+                'parameters' => $json['parameters'] ?? [],
+                'results'    => $json['results']    ?? 0,
+                'paging'     => $json['paging']     ?? [],
+            ],
+        );
+    }
+}
