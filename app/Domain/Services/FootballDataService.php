@@ -31,17 +31,14 @@ class FootballDataService
     public function getTeamById(int $teamId): ?TeamDTO
     {
         $response = $this->client->getTeamById($teamId);
-        Log::info("API response for getTeamById({$teamId}): " . json_encode($response));
         if (! $response->isSuccess()) {
             $this->logError($response, 'getTeamById');
 
             return null; // decisión de negocio
         }
-        Log::info("Mapping team data from API response for team ID {$teamId}");
-        Log::info($response->data);
-        $teams = TeamMapper::fromApi($response->data);
 
-        return $teams[0] ?? null;
+        $teams = TeamMapper::fromApi($response->data);
+        return $teams["team"] ?? null;
     }
 
     /**

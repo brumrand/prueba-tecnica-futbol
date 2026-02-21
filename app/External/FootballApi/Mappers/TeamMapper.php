@@ -13,7 +13,6 @@ final class TeamMapper
          * La API devuelve un array en response[]
          * Para este endpoint sabemos que viene 1 solo equipo
          */
-        Log::info("Mapping team data from API response: " . json_encode($response));
         $data = $response[0];
 
         return [
