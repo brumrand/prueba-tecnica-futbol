@@ -51,13 +51,5 @@ class User extends Authenticatable
         ];
     }
 
-        public function favoriteTeams(): BelongsToMany
-    {
-        return $this->belongsToMany(
-            Team::class,
-            'favorite-teams',   // nombre exacto de la tabla pivote
-            'user_id',          // FK del usuario
-            'team_id'           // FK del equipo
-        )->withTimestamps();
-    }
+
 }
