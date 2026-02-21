@@ -1,6 +1,6 @@
 <?php
 
-namespace App\External\FootBallApi\Mappers;
+namespace App\External\FootballApi\Mappers;
 
 use App\Domain\DTOs\{
     MatchDTO,

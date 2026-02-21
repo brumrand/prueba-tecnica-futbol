@@ -1,11 +1,11 @@
 <?php
 
-namespace App\External\FootBallApi;
+namespace App\External\FootballApi;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Client\Response;
 use Illuminate\Http\Client\RequestException;
-use App\External\FootBallApi\Responses\FootballApiResponse;
+use App\External\FootballApi\Responses\FootballApiResponse;
 final class FootballClient
 {
     private string $baseUrl;
@@ -13,8 +13,8 @@ final class FootballClient
 
     public function __construct()
     {
-        $this->baseUrl = config('services.football_api.base_url');
-        $this->apiKey  = config('services.football_api.key');
+        $this->baseUrl = (string) config('football_api.base_url');
+        $this->apiKey  = (string) config('football_api.key');
     }
 
     public function getTeamsByName(string $name): FootballApiResponse

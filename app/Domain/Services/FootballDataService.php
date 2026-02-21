@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Application\Services\Football;
+namespace App\Domain\Services;
 
-use App\External\FootBallApi\FootballClient;
-use App\External\FootBallApi\Responses\FootballApiResponse;
-use App\External\FootBallApi\Mappers\TeamMapper;
-use App\External\FootBallApi\Mappers\MatchMapper;
-use App\Domain\Dtos\TeamDTO;
-use App\Domain\Dtos\MatchDTO;
+use App\External\FootballApi\FootballClient;
+use App\External\FootballApi\Responses\FootballApiResponse;
+use App\External\FootballApi\Mappers\TeamMapper;
+use App\External\FootballApi\Mappers\MatchMapper;
+use App\Domain\DTOs\TeamDTO;
+use App\Domain\DTOs\MatchDTO;
 use RuntimeException;
-
-final class FootballDataService
+use Log;
+class FootballDataService
 {
     public function __construct(
         private readonly FootballClient $client
@@ -31,13 +31,14 @@ final class FootballDataService
     public function getTeamById(int $teamId): ?TeamDTO
     {
         $response = $this->client->getTeamById($teamId);
-
+        Log::info("API response for getTeamById({$teamId}): " . json_encode($response));
         if (! $response->isSuccess()) {
             $this->logError($response, 'getTeamById');
 
             return null; // decisión de negocio
         }
-
+        Log::info("Mapping team data from API response for team ID {$teamId}");
+        Log::info($response->data);
         $teams = TeamMapper::fromApi($response->data);
 
         return $teams[0] ?? null;

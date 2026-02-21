@@ -1,39 +1,69 @@
 <?php
+
 namespace App\Domain\Services;
 
-use App\Models\User;
+use App\Models\FavoriteTeam;
+
 class FavoriteTeamService
 {
-    public function addFavoriteTeam(int $userId, int $teamId):bool
+    /**
+     * Agrega un equipo a los favoritos del usuario
+     * - Evita duplicados
+     * - Limita a 5 equipos
+     */
+    public function addFavoriteTeam(int $userId, int $teamId): bool
     {
-        // Lógica para agregar un equipo a los favoritos del usuario
-        $user = User::findOrFail($userId);
-        $attched = $user->favoriteTeams()->where('team_id', $teamId)->exists();
-        if(!$attched){
-            if ($user->favoriteTeams()->count() < 5) {
-                $user->favoriteTeams()->attach($teamId);
-                $attched = true;
-            }
-        }
-        return $attched;
+        // Ya existe?
+        $exists = FavoriteTeam::where('user_id', $userId)
+                              ->where('team_id', $teamId)
+                              ->exists();
+        if ($exists) return false;
 
+        // Límite 5 equipos
+        $count = FavoriteTeam::where('user_id', $userId)->count();
+        if ($count >= 5) return false;
+
+        // Insertar nuevo favorito
+        FavoriteTeam::create([
+            'user_id' => $userId,
+            'team_id' => $teamId,
+        ]);
+
+        return true;
     }
 
-    public function removeFavoriteTeam($userId, $teamId):bool
+    /**
+     * Elimina un equipo de los favoritos del usuario
+     */
+    public function removeFavoriteTeam(int $userId, int $teamId): bool
     {
-        // Lógica para eliminar un equipo de los favoritos del usuario
-        $user = User::findOrFail($userId);
-        $attched = $user->favoriteTeams()->where('team_id', $teamId)->exists();
-        if($attched){
-            $user->favoriteTeams()->detach($teamId);
-        }
-        return $attched;
-        
+        $fav = FavoriteTeam::where('user_id', $userId)
+                           ->where('team_id', $teamId)
+                           ->first();
+
+        if (!$fav) return false;
+
+        $fav->delete();
+        return true;
     }
 
-    public function getFavoriteTeams($userId)
+    /**
+     * Obtiene los IDs de los equipos favoritos del usuario
+     */
+    public function getFavoriteTeams(int $userId): array
     {
-        $user = User::findOrFail($userId);
-        return $user->favoriteTeams;
+        return FavoriteTeam::where('user_id', $userId)
+                           ->pluck('team_id')
+                           ->toArray();
+    }
+
+    /**
+     * Verifica si un equipo es favorito del usuario
+     */
+    public function isFavorite(int $userId, int $teamId): bool
+    {
+        return FavoriteTeam::where('user_id', $userId)
+                           ->where('team_id', $teamId)
+                           ->exists();
     }
 }

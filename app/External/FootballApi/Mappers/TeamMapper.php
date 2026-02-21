@@ -1,10 +1,10 @@
 <?php
 
-namespace App\External\FootBallApi\Mappers;
+namespace App\External\FootballApi\Mappers;
 
 use App\Domain\DTOs\TeamDTO;
 use App\Domain\DTOs\VenueDTO;
-
+use Log;
 final class TeamMapper
 {
     public static function fromApi(array $response): array
@@ -13,7 +13,8 @@ final class TeamMapper
          * La API devuelve un array en response[]
          * Para este endpoint sabemos que viene 1 solo equipo
          */
-        $data = $response['response'][0];
+        Log::info("Mapping team data from API response: " . json_encode($response));
+        $data = $response[0];
 
         return [
             'team' => new TeamDTO(

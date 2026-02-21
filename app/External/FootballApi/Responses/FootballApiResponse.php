@@ -1,6 +1,6 @@
 <?php
 
-namespace App\External\FootBallApi\Responses;
+namespace App\External\FootballApi\Responses;
 
 final readonly class FootballApiResponse
 {
