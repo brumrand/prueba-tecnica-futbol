@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FavoriteTeamController;
+use App\Http\Controllers\TeamController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
@@ -14,9 +15,19 @@ Route::get('/', function () {
 
 Route::get('dashboard', DashboardController::class)->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::delete('favorite-teams/{teamId}', 
-[FavoriteTeamController::class, 'destroy'])
+Route::post('favorite-teams/{teamId}', [FavoriteTeamController::class, 'add'])
+    ->middleware(['auth'])
+    ->name('favorite-teams.store');
+
+Route::get('search-by-name', [TeamController::class, 'searchByName'])
+    ->middleware(['auth'])
+    ->name('teams.searchByName');
+
+Route::delete(
+    'favorite-teams/{teamId}',
+    [FavoriteTeamController::class, 'destroy']
+)
     ->middleware(['auth'])
     ->name('favorite-teams.destroy');
 
-require __DIR__.'/settings.php';
+require __DIR__ . '/settings.php';
