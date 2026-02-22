@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useForm } from '@inertiajs/react';
 import { Team } from '@/types/team';
 import { Button } from '@/components/ui/button';
-
+import favoriteTeamsRoutes from '@/routes/favorite-teams'
 interface FavoriteTeamsProps {
     teams: Team[];
 }
@@ -17,7 +17,13 @@ const FavoriteTeams: React.FC<FavoriteTeamsProps> = ({ teams }) => {
     };
 
     const handleUnfavorite = (teamId: number) => {
-        unfavorite(route('favorite-teams.destroy', { teamId }));
+        unfavorite(favoriteTeamsRoutes.destroy(teamId).url, {
+            onSuccess: () => {
+                if (expandedTeam === teamId) {
+                    setExpandedTeam(null);
+                }
+            },
+        });
     };
 
     if (teams.length === 0) {
