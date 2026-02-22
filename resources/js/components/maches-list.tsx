@@ -34,27 +34,28 @@ const MatchesList: React.FC<MatchesListProps> = ({ matches, favTeams }) => {
   }));
 
   // Helper: obtiene datos de equipos favoritos
-  const getFavoriteData = (match: MatchDto) => {
-    const homeFav = favTeams.find(t => t.team.id === match.teams.home.id);
-    const awayFav = favTeams.find(t => t.team.id === match.teams.away.id);
+const getMatchData = (match: MatchDto) => {
+  const homeFav = favTeams.find(t => t.team.id === match.teams.home.id);
+  const awayFav = favTeams.find(t => t.team.id === match.teams.away.id);
 
-    if (!homeFav && !awayFav) return null;
+  const star = (isFav: boolean | undefined) => (isFav ? 'Seguido - ' : 'Rival - '); // estrella solo si es favorito
 
-    return (
-      <div className="mt-2 border-t pt-2 space-y-1">
-        {homeFav && (
-          <div>
-            <strong>Your Team:</strong> {homeFav.team.name} ({homeFav.team.country}) - Founded: {homeFav.team.founded}
-          </div>
-        )}
-        {awayFav && (
-          <div>
-            <strong>Opponent Team:</strong> {awayFav.team.name} ({awayFav.team.country}) - Founded: {awayFav.team.founded}
-          </div>
-        )}
+  return (
+    <div className="mt-2 border-t pt-2 space-y-1">
+                      <p><strong>Date:</strong> {new Date(match.fixture.date).toLocaleString()}</p>
+                <p><strong>League:</strong> {match.league.name}</p>
+                <p><strong>Score:</strong> {match.score.fulltime.home ?? '-'} : {match.score.fulltime.away ?? '-'}</p>
+                <p><strong>Status:</strong> {match.fixture.status.long}</p>
+      <div>
+        <strong>{star(!!homeFav)}Home Team:</strong> <img src={match.teams.home.logo} className="w-6 h-6 mr-2" />{match.teams.home.name} 
       </div>
-    );
-  };
+
+      <div>
+        <strong>{star(!!awayFav)}Away Team:</strong> <img src={match.teams.away.logo} className="w-6 h-6 mr-2" />{match.teams.away.name}
+      </div>
+    </div>
+  );
+};
 
   return (
     <div className="space-y-4">
@@ -114,13 +115,10 @@ const MatchesList: React.FC<MatchesListProps> = ({ matches, favTeams }) => {
 
               {expandedMatch === match.fixture.id && (
                 <div className="mt-4 text-sm space-y-1">
-                  <p><strong>League:</strong> {match.league.name}</p>
-                  <p><strong>Date:</strong> {new Date(match.fixture.date).toLocaleString()}</p>
-                  <p><strong>Status:</strong> {match.fixture.status.long}</p>
-                  <p><strong>Venue:</strong> {match.fixture.venue.name}, {match.fixture.venue.city}</p>
+
 
                   {/* ---------- Favorite Teams Info ---------- */}
-                  {getFavoriteData(match)}
+                  {getMatchData(match)}
                 </div>
               )}
             </div>
@@ -149,7 +147,7 @@ const MatchesList: React.FC<MatchesListProps> = ({ matches, favTeams }) => {
         </div>
       )}
 
-      {/* ================= MATCH DETAILS (CALENDAR) ================= */}
+
       {viewMode === 'calendar' && expandedMatch && (
         <div className="border rounded-lg p-4 dark:border-slate-700">
           {matches
@@ -159,13 +157,8 @@ const MatchesList: React.FC<MatchesListProps> = ({ matches, favTeams }) => {
                 <h3 className="font-bold mb-2">
                   {match.teams.home.name} vs {match.teams.away.name}
                 </h3>
-                <p><strong>Date:</strong> {new Date(match.fixture.date).toLocaleString()}</p>
-                <p><strong>League:</strong> {match.league.name}</p>
-                <p><strong>Score:</strong> {match.score.fulltime.home ?? '-'} : {match.score.fulltime.away ?? '-'}</p>
-                <p><strong>Status:</strong> {match.fixture.status.long}</p>
 
-                {/* ---------- Favorite Teams Info ---------- */}
-                {getFavoriteData(match)}
+                {getMatchData(match)}
               </div>
             ))}
         </div>
