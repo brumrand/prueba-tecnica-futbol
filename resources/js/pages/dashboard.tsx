@@ -32,7 +32,7 @@ export default function Dashboard({ favoriteTeams, matchData  }: { favoriteTeams
                     </div>
                 </div>
                 <div className="relative min-h-[100vh] flex-1  overflow-y-auto pr-2 rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
-                   <MatchesList matches={matchData} />
+                   <MatchesList matches={matchData} favTeams={favoriteTeams} />
                 </div>
             </div>
         </AppLayout>

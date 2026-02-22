@@ -141,3 +141,35 @@
         @apply bg-background text-foreground;
     }
 }
+/* ===== FullCalendar Dark Mode ===== */
+.fc-dark, .fc-scrollgrid-sync-inner {
+  background-color: #0f172a; /* slate-900 */
+  color: #e5e7eb;
+}
+
+.fc-dark .fc-toolbar-title,
+.fc-dark .fc-daygrid-day-number {
+  color: #e5e7eb;
+}
+
+.fc-dark .fc-daygrid-day {
+  background-color: #020617; /* slate-950 */
+}
+
+.fc-dark .fc-day-today {
+  background-color: rgba(59, 130, 246, 0.15);
+}
+
+.fc-dark .fc-event {
+  background-color: #2563eb;
+  border: none;
+}
+
+.fc-dark .fc-button {
+  background-color: #1e293b;
+  border: none;
+}
+
+.fc-dark .fc-button-primary:not(:disabled):hover {
+  background-color: #334155;
+}
