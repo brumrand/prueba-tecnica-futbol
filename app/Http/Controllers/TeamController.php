@@ -12,28 +12,65 @@ class TeamController extends Controller
     {
     }
 
-    public function searchByName(SearchByNameReq $request,): JsonResponse
+    public function searchByName(SearchByNameReq $request, ): JsonResponse
     {
         $name = $request->validated()['name'];
         //$teams = $this->footballDataService->getTeamsByName($name);
-        $teams = [[
-                    'id' => 23,
-                    'name' => 'Manchester United',
-                    'code' => 'MUN',
-                    'country' => 'England',
-                    'founded' => 1878,
-                    'national' => false,
-                    'logo' => 'https://media.api-sports.io/football/teams/33.png',
-        ],[
-                    'id' => 25,
-                    'name' => 'Liverpool',
-                    'code' => 'LIV',
-                    'country' => 'England',
-                    'founded' => 1892,
-                    'national' => false,
-                    'logo' => 'https://media.api-sports.io/football/teams/28.png',
-            ]];
-            Log::info('Teams found', ['teams' => $teams]);
+        $teams = [
+            [
+                'id' => 23,
+                'name' => 'Manchester United',
+                'code' => 'MUN',
+                'country' => 'England',
+                'founded' => 1878,
+                'national' => false,
+                'logo' => 'https://media.api-sports.io/football/teams/33.png',
+            ],
+            [
+                'id' => 25,
+                'name' => 'Liverpool',
+                'code' => 'LIV',
+                'country' => 'England',
+                'founded' => 1892,
+                'national' => false,
+                'logo' => 'https://media.api-sports.io/football/teams/28.png',
+            ], [
+                'id' => 33,
+                'name' => 'Manchester United',
+                'code' => 'MUN',
+                'country' => 'England',
+                'founded' => 1878,
+                'national' => false,
+                'logo' => 'https://media.api-sports.io/football/teams/33.png',
+            ],
+            [
+                'id' => 34,
+                'name' => 'Liverpool',
+                'code' => 'LIV',
+                'country' => 'England',
+                'founded' => 1892,
+                'national' => false,
+                'logo' => 'https://media.api-sports.io/football/teams/28.png',
+            ], [
+                'id' => 36,
+                'name' => 'Manchester United',
+                'code' => 'MUN',
+                'country' => 'England',
+                'founded' => 1878,
+                'national' => false,
+                'logo' => 'https://media.api-sports.io/football/teams/33.png',
+            ],
+            [
+                'id' => 37,
+                'name' => 'Liverpool',
+                'code' => 'LIV',
+                'country' => 'England',
+                'founded' => 1892,
+                'national' => false,
+                'logo' => 'https://media.api-sports.io/football/teams/28.png',
+            ]
+        ];
+        Log::info('Teams found', ['teams' => $teams]);
         return response()->json($teams);
     }
 

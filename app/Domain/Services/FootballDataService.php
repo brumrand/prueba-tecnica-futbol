@@ -14,7 +14,8 @@ class FootballDataService
 {
     public function __construct(
         private readonly FootballClient $client
-    ) {}
+    ) {
+    }
 
     /**
      * @return TeamDTO[]
@@ -31,7 +32,7 @@ class FootballDataService
     public function getTeamById(int $teamId): ?TeamDTO
     {
         $response = $this->client->getTeamById($teamId);
-        if (! $response->isSuccess()) {
+        if (!$response->isSuccess()) {
             $this->logError($response, 'getTeamById');
 
             return null; // decisión de negocio
@@ -48,7 +49,7 @@ class FootballDataService
     {
         $response = $this->client->getFixtures(['live' => 'all']);
 
-        if (! $response->isSuccess()) {
+        if (!$response->isSuccess()) {
             $this->logError($response, 'getLiveFixtures');
 
             // fallback razonable
@@ -56,6 +57,24 @@ class FootballDataService
         }
 
         return MatchMapper::fromApi($response->data);
+    }
+
+    public function getTeamsMatches(array $teamId, int $season = 2024): array
+    {
+        $results = [];
+        foreach ($teamId as $id) {
+            $response = $this->client->getFixtures(['team' => $id, 'season' => $season]);
+            if (!$response->isSuccess()) {
+                $this->logError($response, 'getTeamMatches');
+            } else {
+                $matches = MatchMapper::fromApi($response->data);
+                $results = array_merge($results, $matches);
+            }
+        }
+        usort($results, function ($a, $b) {
+            return strtotime($a->fixture->date) <=> strtotime($b->fixture->date);
+        });
+        return $results;
     }
 
     /**
@@ -81,10 +100,10 @@ class FootballDataService
         string $context
     ): void {
         logger()->error('Football API failure', [
-            'context'     => $context,
+            'context' => $context,
             'http_status' => $response->httpStatus,
-            'errors'      => $response->errors,
-            'meta'        => $response->meta,
+            'errors' => $response->errors,
+            'meta' => $response->meta,
         ]);
     }
 }

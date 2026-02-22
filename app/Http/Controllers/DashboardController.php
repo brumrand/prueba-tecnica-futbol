@@ -21,7 +21,8 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         $favoriteTeams = $this->favoriteTeamService->getFavoriteTeams($user->id);
-        $matchData = $this->fakeLiveFixtures();
+        $matchData = $this->footballDataService->getTeamsMatches($favoriteTeams);
+        // $matchData = $this->fakeLiveFixtures();
 
         $teamsData = [];
         foreach ($favoriteTeams as $team) {
@@ -51,7 +52,7 @@ class DashboardController extends Controller
 {
     return [
         [
-            'id' => 239625,
+            'id' => 2392323625,
             'date' => '2025-02-06T14:00:00+00:00',
             'status' => 'HT',
             'league' => [
@@ -90,7 +91,7 @@ class DashboardController extends Controller
             ],
         ],
         [
-            'id' => 239626,
+            'id' => 2323239626,
             'date' => '2025-02-06T16:30:00+00:00',
             'status' => 'NS',
             'league' => [
@@ -121,6 +122,240 @@ class DashboardController extends Controller
                 'halftime' => [
                     'home' => null,
                     'away' => null,
+                ],
+                'fulltime' => [
+                    'home' => null,
+                    'away' => null,
+                ],
+            ],
+        ],
+        [
+            'id' => 2323239625,
+            'date' => '2025-02-06T14:00:00+00:00',
+            'status' => 'HT',
+            'league' => [
+                'name' => 'Premier League',
+                'country' => 'England',
+                'logo' => 'https://media.api-sports.io/football/leagues/39.png',
+                'round' => 'Regular Season - 24',
+            ],
+            'venue' => [
+                'name' => 'Old Trafford',
+                'city' => 'Manchester',
+            ],
+            'teams' => [
+                'home' => [
+                    'id' => 33,
+                    'name' => 'Manchester United',
+                    'logo' => 'https://media.api-sports.io/football/teams/33.png',
+                    'winner' => null,
+                ],
+                'away' => [
+                    'id' => 50,
+                    'name' => 'Manchester City',
+                    'logo' => 'https://media.api-sports.io/football/teams/50.png',
+                    'winner' => null,
+                ],
+            ],
+            'score' => [
+                'halftime' => [
+                    'home' => 1,
+                    'away' => 1,
+                ],
+                'fulltime' => [
+                    'home' => null,
+                    'away' => null,
+                ],
+            ],
+        ],
+        [
+            'id' => 2392323626,
+            'date' => '2025-02-06T16:30:00+00:00',
+            'status' => 'NS',
+            'league' => [
+                'name' => 'La Liga',
+                'country' => 'Spain',
+                'logo' => 'https://media.api-sports.io/football/leagues/140.png',
+                'round' => 'Regular Season - 22',
+            ],
+            'venue' => [
+                'name' => 'Santiago Bernabéu',
+                'city' => 'Madrid',
+            ],
+            'teams' => [
+                'home' => [
+                    'id' => 541,
+                    'name' => 'Real Madrid',
+                    'logo' => 'https://media.api-sports.io/football/teams/541.png',
+                    'winner' => null,
+                ],
+                'away' => [
+                    'id' => 529,
+                    'name' => 'Barcelona',
+                    'logo' => 'https://media.api-sports.io/football/teams/529.png',
+                    'winner' => null,
+                ],
+            ],
+            'score' => [
+                'halftime' => [
+                    'home' => null,
+                    'away' => null,
+                ],
+                'fulltime' => [
+                    'home' => null,
+                    'away' => null,
+                ],
+            ],
+        ],
+        [
+            'id' => 2392323625,
+            'date' => '2025-02-06T14:00:00+00:00',
+            'status' => 'HT',
+            'league' => [
+                'name' => 'Premier League',
+                'country' => 'England',
+                'logo' => 'https://media.api-sports.io/football/leagues/39.png',
+                'round' => 'Regular Season - 24',
+            ],
+            'venue' => [
+                'name' => 'Old Trafford',
+                'city' => 'Manchester',
+            ],
+            'teams' => [
+                'home' => [
+                    'id' => 33,
+                    'name' => 'Manchester United',
+                    'logo' => 'https://media.api-sports.io/football/teams/33.png',
+                    'winner' => null,
+                ],
+                'away' => [
+                    'id' => 50,
+                    'name' => 'Manchester City',
+                    'logo' => 'https://media.api-sports.io/football/teams/50.png',
+                    'winner' => null,
+                ],
+            ],
+            'score' => [
+                'halftime' => [
+                    'home' => 1,
+                    'away' => 1,
+                ],
+                'fulltime' => [
+                    'home' => null,
+                    'away' => null,
+                ],
+            ],
+        ],
+        [
+            'id' => 2323239626,
+            'date' => '2025-02-06T16:30:00+00:00',
+            'status' => 'NS',
+            'league' => [
+                'name' => 'La Liga',
+                'country' => 'Spain',
+                'logo' => 'https://media.api-sports.io/football/leagues/140.png',
+                'round' => 'Regular Season - 22',
+            ],
+            'venue' => [
+                'name' => 'Santiago Bernabéu',
+                'city' => 'Madrid',
+            ],
+            'teams' => [
+                'home' => [
+                    'id' => 541,
+                    'name' => 'Real Madrid',
+                    'logo' => 'https://media.api-sports.io/football/teams/541.png',
+                    'winner' => null,
+                ],
+                'away' => [
+                    'id' => 529,
+                    'name' => 'Barcelona',
+                    'logo' => 'https://media.api-sports.io/football/teams/529.png',
+                    'winner' => null,
+                ],
+            ],
+            'score' => [
+                'halftime' => [
+                    'home' => null,
+                    'away' => null,
+                ],
+                'fulltime' => [
+                    'home' => null,
+                    'away' => null,
+                ],
+            ],
+        ],
+        [
+            'id' => 23239625,
+            'date' => '2025-02-06T14:00:00+00:00',
+            'status' => 'HT',
+            'league' => [
+                'name' => 'Premier League',
+                'country' => 'England',
+                'logo' => 'https://media.api-sports.io/football/leagues/39.png',
+                'round' => 'Regular Season - 24',
+            ],
+            'venue' => [
+                'name' => 'Old Trafford',
+                'city' => 'Manchester',
+            ],
+            'teams' => [
+                'home' => [
+                    'id' => 33,
+                    'name' => 'Manchester United',
+                    'logo' => 'https://media.api-sports.io/football/teams/33.png',
+                    'winner' => null,
+                ],
+                'away' => [
+                    'id' => 50,
+                    'name' => 'Manchester City',
+                    'logo' => 'https://media.api-sports.io/football/teams/50.png',
+                    'winner' => null,
+                ],
+            ],
+            'score' => [
+                'halftime' => [
+                    'home' => 1,
+                    'away' => 1,
+                ],
+                'fulltime' => [
+                    'home' => null,
+                    'away' => null,
+                ],
+            ],
+        ],
+        [
+            'id' => 239627,
+            'date' => '2025-02-06T16:30:00+00:00',
+            'status' => 'NS',
+            'league' => [
+                'name' => 'La Liga',
+                'country' => 'Spain',
+                'logo' => 'https://media.api-sports.io/football/leagues/140.png',
+                'round' => 'Regular Season - 22',
+            ],
+            'venue' => [
+                'name' => 'Santiago Bernabéu',
+                'city' => 'Madrid',
+            ],
+            'teams' => [
+                'home' => [
+                    'id' => 541,
+                    'name' => 'Real Madrid',
+                    'logo' => 'https://media.api-sports.io/football/teams/541.png',
+                    'winner' => null,
+                ],
+                'away' => [
+                    'id' => 529,
+                    'name' => 'Barcelona',
+                    'logo' => 'https://media.api-sports.io/football/teams/529.png',
+                    'winner' => True,
+                ],
+            ],
+            'score' => [
+                'halftime' => [
+                    'home' => 1,
+                    'away' => 0,
                 ],
                 'fulltime' => [
                     'home' => null,

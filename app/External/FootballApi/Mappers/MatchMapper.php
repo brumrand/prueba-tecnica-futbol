@@ -2,19 +2,18 @@
 
 namespace App\External\FootballApi\Mappers;
 
-use App\Domain\DTOs\{
-    MatchDTO,
-    FixtureDTO,
-    PeriodsDTO,
-    FixtureVenueDTO,
-    StatusDTO,
-    LeagueDTO,
-    TeamsDTO,
-    TeamSideDTO,
-    GoalsDTO,
-    ScoreDTO,
-    ScoreSideDTO
-};
+use App\Domain\DTOs\MatchDTO;
+use App\Domain\DTOs\FixtureDTO;
+use App\Domain\DTOs\PeriodsDTO;
+use App\Domain\DTOs\FixtureVenueDTO;
+use App\Domain\DTOs\StatusDTO;
+use App\Domain\DTOs\LeagueDTO;
+use App\Domain\DTOs\TeamsDTO;
+use App\Domain\DTOs\TeamSideDTO;
+use App\Domain\DTOs\GoalsDTO;
+use App\Domain\DTOs\ScoreDTO;
+use App\Domain\DTOs\ScoreSideDTO;
+use Log;
 
 final class MatchMapper
 {
@@ -23,7 +22,8 @@ final class MatchMapper
      */
     public static function fromApi(array $response): array
     {
-        return collect($response['response'])
+        Log::info('Mapping matches from API response', ['response' => $response]);
+        return collect($response)
             ->map(fn (array $item) => self::mapMatch($item))
             ->all();
     }
