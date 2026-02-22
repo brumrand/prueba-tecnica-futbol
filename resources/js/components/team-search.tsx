@@ -18,7 +18,7 @@ const TeamSearch: React.FC<Props> = ({ favoriteTeams }) => {
     const [results, setResults] = useState<Team[]>([])
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
-
+    const favCount = favoriteTeams.length
     const favoriteForm = useForm<FavoriteTeamForm>({ team_id: null })
 
     const favoriteIds = useMemo(
@@ -26,7 +26,7 @@ const TeamSearch: React.FC<Props> = ({ favoriteTeams }) => {
         [favoriteTeams]
     )
 
-    const handleSearch = async (e: React.FormEvent) => {
+    const handleSearch = async (e: React.SubmitEvent) => {
         e.preventDefault()
         if (!query) return
 
@@ -58,7 +58,8 @@ const TeamSearch: React.FC<Props> = ({ favoriteTeams }) => {
     }
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 h-full">
+            <h2 className='w-full text-center font-bold'>Team Searcher</h2>
             <form onSubmit={handleSearch} className="flex gap-2">
                 <input
                     type="text"
@@ -74,7 +75,12 @@ const TeamSearch: React.FC<Props> = ({ favoriteTeams }) => {
 
             {error && <p className="text-red-500">{error}</p>}
 
-            <div className="space-y-3">
+            <div className="space-y-3 max-h-[60vh] overflow-y-auto pr-2">
+                {favCount >= 5 && (
+                    <p className="text-yellow-600">
+                        You have reached the maximum of 5 favorite teams. Remove one to add more.
+                    </p>
+                )}
                 {results.length === 0 && !loading && query && <p>No teams found.</p>}
 
                 {results.map(team => {
@@ -94,7 +100,7 @@ const TeamSearch: React.FC<Props> = ({ favoriteTeams }) => {
 
                             <Button
                                 onClick={() => handleAddFavorite(team)}
-                                disabled={isFavorite || favoriteForm.processing}
+                                disabled={isFavorite || favoriteForm.processing || favCount >= 5}
                                 variant={isFavorite ? 'secondary' : 'default'}
                             >
                                 {isFavorite ? 'Already added' : 'Add to favorites'}
