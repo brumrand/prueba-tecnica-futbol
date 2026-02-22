@@ -4,7 +4,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { MatchDto } from '@/types/match';
 import { TeamWithVenue } from '@/types/team';
-import { useDarkMode } from '@/hooks/use';
+import { useDarkMode } from '@/hooks/use-dark-mode';
 
 interface MatchesListProps {
   matches: MatchDto[];
