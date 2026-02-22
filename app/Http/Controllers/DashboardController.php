@@ -22,7 +22,7 @@ class DashboardController extends Controller
         $user = Auth::user();
         $favoriteTeams = $this->favoriteTeamService->getFavoriteTeams($user->id);
         $matchData = $this->footballDataService->getTeamsMatches($favoriteTeams);
-        $matchData = $this->fakeLiveFixtures();
+        // $matchData = $this->fakeLiveFixtures();
 
         $teamsData = [];
         foreach ($favoriteTeams as $team) {
