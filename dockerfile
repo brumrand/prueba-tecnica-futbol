@@ -5,24 +5,40 @@ WORKDIR /app
 # Instalar PHP y extensiones (incluyendo las necesarias para que no chille)
 RUN apk add --no-cache \
     --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community \
-    php84 php84-cli php84-common php84-mbstring php84-xml php84-openssl \
-    php84-tokenizer php84-curl php84-phar php84-session php84-fileinfo \
-    php84-dom php84-xmlwriter php84-xmlreader composer
+    php84 \
+    php84-cli \
+    php84-common \
+    php84-pdo \
+    php84-pdo_pgsql \
+    php84-mbstring \
+    php84-xml \
+    php84-openssl \
+    php84-tokenizer \
+    php84-curl \
+    php84-phar \
+    php84-session \
+    php84-fileinfo \
+    php84-dom \
+    php84-xmlwriter \
+    php84-xmlreader \
+    php84-ctype \
+    php84-posix \
+    composer
 
 RUN ln -sf /usr/bin/php84 /usr/bin/php
 
 # 1. Dependencias PHP
+COPY . .
 COPY composer.json composer.lock ./
-RUN composer install --no-scripts --no-autoloader --no-dev --ignore-platform-reqs
+RUN composer install 
 
 # 2. Dependencias Node
 COPY package*.json ./
 RUN npm install
 
 # 3. Copiar código y generar autoloader (SIN SCRIPTS para evitar el error de Pail)
-COPY . .
+
 ENV APP_ENV=production
-RUN composer dump-autoload --no-dev --optimize --no-scripts
 
 # 4. Build de Assets (Wayfinder ahora funcionará porque el autoloader existe)
 RUN npm run build
