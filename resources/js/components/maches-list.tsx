@@ -1,123 +1,156 @@
 import React, { useState } from 'react';
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
 import { MatchDto } from '@/types/match';
+import { useDarkMode } from '@/hooks/use-dark-mode';
 
 interface MatchesListProps {
-    matches: MatchDto[];
+  matches: MatchDto[];
 }
 
+type ViewMode = 'list' | 'calendar';
+
 const MatchesList: React.FC<MatchesListProps> = ({ matches }) => {
-    const [expandedMatch, setExpandedMatch] = useState<number | null>(null);
+  const [expandedMatch, setExpandedMatch] = useState<number | null>(null);
+  const [viewMode, setViewMode] = useState<ViewMode>('list');
 
-    const toggleMatch = (matchId: number) => {
-        setExpandedMatch(expandedMatch === matchId ? null : matchId);
-    };
+  // ✅ Dark mode desde el hook
+  const isDarkMode = useDarkMode();
 
-    if (matches.length === 0) {
-        return <p>No matches available.</p>;
-    }
+  const toggleMatch = (matchId: number) => {
+    setExpandedMatch(expandedMatch === matchId ? null : matchId);
+  };
 
-    return (
+  if (matches.length === 0) {
+    return <p>No matches available.</p>;
+  }
+
+  /* ---------- Calendar events ---------- */
+  const calendarEvents = matches.map(match => ({
+    id: String(match.fixture.id),
+    title: `${match.teams.home.name} vs ${match.teams.away.name}`,
+    date: match.fixture.date,
+    extendedProps: match,
+  }));
+
+  return (
+    <div className="space-y-4">
+      {/* HEADER */}
+      <div className="flex justify-between items-center">
+        <h2 className="font-bold">Matches</h2>
+
+        {/* VIEW TOGGLE */}
+        <div className="flex gap-2">
+          <button
+            onClick={() => setViewMode('list')}
+            className={`px-3 py-1 rounded ${
+              viewMode === 'list'
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-200 dark:bg-slate-700 dark:text-white'
+            }`}
+          >
+            List
+          </button>
+          <button
+            onClick={() => setViewMode('calendar')}
+            className={`px-3 py-1 rounded ${
+              viewMode === 'calendar'
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-200 dark:bg-slate-700 dark:text-white'
+            }`}
+          >
+            Calendar
+          </button>
+        </div>
+      </div>
+
+      {/* ================= LIST VIEW ================= */}
+      {viewMode === 'list' && (
         <div className="space-y-4">
-            <h2 className="w-full text-center font-bold">Matches</h2>
-            {matches.map((match) => (
-                <div
-                    key={`${match.fixture.id}-${match.fixture.status.short}-${match.fixture.date}`}
-                    className="border rounded-lg p-4"
-                >
-                    {/* HEADER */}
-                    <div
-                        className="flex items-center cursor-pointer"
-                        onClick={() => toggleMatch(match.fixture.id)}
-                    >
-                        {/* Home team */}
-                        <div className="flex items-center w-1/3">
-                            <img
-                                src={match.teams.home.logo}
-                                alt={match.teams.home.name}
-                                className="w-6 h-6 mr-2"
-                            />
-                            <span className="font-medium">{match.teams.home.name}</span>
-                        </div>
-
-                        {/* Score */}
-                        <div className="w-1/3 text-center font-bold">
-                            {match.score.fulltime.home ?? '-'} : {match.score.fulltime.away ?? '-'}
-                        </div>
-
-                        {/* Away team */}
-                        <div className="flex items-center justify-end w-1/3">
-                            <span className="font-medium mr-2">{match.teams.away.name}</span>
-                            <img
-                                src={match.teams.away.logo}
-                                alt={match.teams.away.name}
-                                className="w-6 h-6"
-                            />
-                        </div>
-                    </div>
-
-                    {/* DETAILS */}
-                    {expandedMatch === match.fixture.id && (
-                        <div className="mt-4 text-sm space-y-2">
-                            <p>
-                                <strong>League:</strong> {match.league.name} ({match.league.country})
-                            </p>
-                            <p>
-                                <strong>Round:</strong> {match.league.round}
-                            </p>
-                            <p>
-                                <strong>Season:</strong> {match.league.season}
-                            </p>
-                            <p>
-                                <strong>Standings Enabled:</strong> {match.league.standings ? 'Yes' : 'No'}
-                            </p>
-
-                            <p>
-                                <strong>Date:</strong>{' '}
-                                {match.fixture.date
-                                    ? new Date(match.fixture.date).toLocaleString()
-                                    : 'Unknown date'}
-                            </p>
-                            <p>
-                                <strong>Timezone:</strong> {match.fixture.timezone}
-                            </p>
-                            <p>
-                                <strong>Referee:</strong> {match.fixture.referee ?? 'N/A'}
-                            </p>
-                            <p>
-                                <strong>Status:</strong> {match.fixture.status.long} ({match.fixture.status.short}) – Elapsed:{' '}
-                                {match.fixture.status.elapsed ?? 0} min
-                            </p>
-
-                            <p>
-                                <strong>Venue:</strong> {match.fixture.venue.name} – {match.fixture.venue.city}
-                            </p>
-
-                            <div>
-                                <strong>Halftime:</strong> {match.score.halftime.home ?? '-'} : {match.score.halftime.away ?? '-'}
-                            </div>
-                            <div>
-                                <strong>Fulltime:</strong> {match.score.fulltime.home ?? '-'} : {match.score.fulltime.away ?? '-'}
-                            </div>
-                            {match.score.extratime && (
-                                <div>
-                                    <strong>Extra time:</strong> {match.score.extratime.home ?? '-'} : {match.score.extratime.away ?? '-'}
-                                </div>
-                            )}
-                            {match.score.penalty && (
-                                <div>
-                                    <strong>Penalty:</strong> {match.score.penalty.home ?? '-'} : {match.score.penalty.away ?? '-'}
-                                </div>
-                            )}
-
-                            <div className="pt-2">
-                                <strong>Winner:</strong> {match.teams.home.winner ? match.teams.home.name : match.teams.away.winner ? match.teams.away.name : 'Draw / TBD'}
-                            </div>
-                        </div>
-                    )}
+          {matches.map(match => (
+            <div
+              key={match.fixture.id}
+              className="border rounded-lg p-4 dark:border-slate-700"
+            >
+              <div
+                className="flex items-center cursor-pointer"
+                onClick={() => toggleMatch(match.fixture.id)}
+              >
+                <div className="flex items-center w-1/3">
+                  <img src={match.teams.home.logo} className="w-6 h-6 mr-2" />
+                  {match.teams.home.name}
                 </div>
+
+                <div className="w-1/3 text-center font-bold">
+                  {match.score.fulltime.home ?? '-'} :{' '}
+                  {match.score.fulltime.away ?? '-'}
+                </div>
+
+                <div className="flex justify-end w-1/3">
+                  {match.teams.away.name}
+                  <img src={match.teams.away.logo} className="w-6 h-6 ml-2" />
+                </div>
+              </div>
+
+              {expandedMatch === match.fixture.id && (
+                <div className="mt-4 text-sm space-y-1">
+                  <p><strong>League:</strong> {match.league.name}</p>
+                  <p><strong>Date:</strong> {new Date(match.fixture.date).toLocaleString()}</p>
+                  <p><strong>Status:</strong> {match.fixture.status.long}</p>
+                  <p><strong>Venue:</strong> {match.fixture.venue.name}</p>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ================= CALENDAR VIEW ================= */}
+      {viewMode === 'calendar' && (
+        <div
+          className={`rounded-lg p-4 ${
+            isDarkMode ? 'fc-dark' : 'bg-white'
+          }`}
+        >
+          <FullCalendar
+            plugins={[dayGridPlugin, interactionPlugin]}
+            initialView="dayGridMonth"
+            events={calendarEvents}
+            height="auto"
+            headerToolbar={{
+              left: 'prev,next today',
+              center: 'title',
+              right: 'dayGridMonth,dayGridWeek',
+            }}
+            eventClick={(info) => {
+              const match = info.event.extendedProps as MatchDto;
+              setExpandedMatch(match.fixture.id);
+            }}
+          />
+        </div>
+      )}
+
+      {/* ================= MATCH DETAILS (CALENDAR) ================= */}
+      {viewMode === 'calendar' && expandedMatch && (
+        <div className="border rounded-lg p-4 dark:border-slate-700">
+          {matches
+            .filter(m => m.fixture.id === expandedMatch)
+            .map(match => (
+              <div key={match.fixture.id}>
+                <h3 className="font-bold mb-2">
+                  {match.teams.home.name} vs {match.teams.away.name}
+                </h3>
+                <p><strong>Date:</strong> {new Date(match.fixture.date).toLocaleString()}</p>
+                <p><strong>League:</strong> {match.league.name}</p>
+                <p><strong>Score:</strong> {match.score.fulltime.home ?? '-'} : {match.score.fulltime.away ?? '-'}</p>
+                <p><strong>Status:</strong> {match.fixture.status.long}</p>
+              </div>
             ))}
         </div>
-    );
+      )}
+    </div>
+  );
 };
 
 export default MatchesList;

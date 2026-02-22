@@ -1,25 +1,25 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
-* @see \App\Http\Controllers\FavoriteTeamController::add
+* @see \App\Http\Controllers\FavoriteTeamController::store
 * @see app/Http/Controllers/FavoriteTeamController.php:23
 * @route '/favorite-teams/{teamId}'
 */
-export const add = (args: { teamId: string | number } | [teamId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
-    url: add.url(args, options),
+export const store = (args: { teamId: string | number } | [teamId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: store.url(args, options),
     method: 'post',
 })
 
-add.definition = {
+store.definition = {
     methods: ["post"],
     url: '/favorite-teams/{teamId}',
 } satisfies RouteDefinition<["post"]>
 
 /**
-* @see \App\Http\Controllers\FavoriteTeamController::add
+* @see \App\Http\Controllers\FavoriteTeamController::store
 * @see app/Http/Controllers/FavoriteTeamController.php:23
 * @route '/favorite-teams/{teamId}'
 */
-add.url = (args: { teamId: string | number } | [teamId: string | number ] | string | number, options?: RouteQueryOptions) => {
+store.url = (args: { teamId: string | number } | [teamId: string | number ] | string | number, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { teamId: args }
     }
@@ -36,42 +36,42 @@ add.url = (args: { teamId: string | number } | [teamId: string | number ] | stri
         teamId: args.teamId,
     }
 
-    return add.definition.url
+    return store.definition.url
             .replace('{teamId}', parsedArgs.teamId.toString())
             .replace(/\/+$/, '') + queryParams(options)
 }
 
 /**
-* @see \App\Http\Controllers\FavoriteTeamController::add
+* @see \App\Http\Controllers\FavoriteTeamController::store
 * @see app/Http/Controllers/FavoriteTeamController.php:23
 * @route '/favorite-teams/{teamId}'
 */
-add.post = (args: { teamId: string | number } | [teamId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
-    url: add.url(args, options),
+store.post = (args: { teamId: string | number } | [teamId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: store.url(args, options),
     method: 'post',
 })
 
 /**
-* @see \App\Http\Controllers\FavoriteTeamController::add
+* @see \App\Http\Controllers\FavoriteTeamController::store
 * @see app/Http/Controllers/FavoriteTeamController.php:23
 * @route '/favorite-teams/{teamId}'
 */
-const addForm = (args: { teamId: string | number } | [teamId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
-    action: add.url(args, options),
+const storeForm = (args: { teamId: string | number } | [teamId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: store.url(args, options),
     method: 'post',
 })
 
 /**
-* @see \App\Http\Controllers\FavoriteTeamController::add
+* @see \App\Http\Controllers\FavoriteTeamController::store
 * @see app/Http/Controllers/FavoriteTeamController.php:23
 * @route '/favorite-teams/{teamId}'
 */
-addForm.post = (args: { teamId: string | number } | [teamId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
-    action: add.url(args, options),
+storeForm.post = (args: { teamId: string | number } | [teamId: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: store.url(args, options),
     method: 'post',
 })
 
-add.form = addForm
+store.form = storeForm
 
 /**
 * @see \App\Http\Controllers\FavoriteTeamController::destroy
@@ -157,6 +157,6 @@ destroyForm.delete = (args: { teamId: string | number } | [teamId: string | numb
 
 destroy.form = destroyForm
 
-const FavoriteTeamController = { add, destroy }
+const FavoriteTeamController = { store, destroy }
 
 export default FavoriteTeamController
