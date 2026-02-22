@@ -47,10 +47,8 @@ export default function Welcome({
                         )}
                     </nav>
                 </header>
-                <div className="flex w-full items-center justify-center opacity-100 transition-opacity duration-750 lg:grow starting:opacity-0">
-                    <h1 className="text-6xl font-extrabold text-gray-800 dark:text-white tracking-wide">
-                        Football App
-                    </h1>
+                <div className="flex w-full items-center justify-center opacity-100 transition-opacity duration-750 lg:grow starting:opacity-0 bg-[url('/storage/welcome.png')] bg-cover bg-center bg-no-repeat">
+
                 </div>
             </div>
         </>

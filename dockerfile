@@ -45,6 +45,7 @@ RUN chown -R www-data:www-data storage bootstrap/cache public
 
 # Limpiamos caché de configuración para que no use rutas del builder
 RUN php artisan config:clear && php artisan route:clear
+RUN php artisan storage:link
 
 # FrankenPHP necesita este permiso para el binario interno si usa octane
 USER www-data
