@@ -35,17 +35,17 @@ class FootballDataService
         return $teams; 
     }
 
-    public function getTeamById(int $teamId): ?TeamDTO
+    public function getTeamById(int $teamId): array|null
     {
         $response = $this->client->getTeamById($teamId);
         if (!$response->isSuccess()) {
             $this->logError($response, 'getTeamById');
 
-            return null; // decisión de negocio
+            return null; 
         }
 
-        $teams = TeamMapper::fromApi($response->data);
-        return $teams["team"] ?? null;
+        return TeamMapper::fromApi($response->data[0]);
+        
     }
 
     /**

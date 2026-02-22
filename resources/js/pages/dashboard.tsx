@@ -6,7 +6,7 @@ import { dashboard } from '@/routes';
 import FavoriteTeams from '@/components/favorite-teams';
 import MatchesList from '@/components/maches-list';
 import TeamSearch from '@/components/team-search';
-import { Team } from '@/types/team';
+import { TeamWithVenue } from '@/types/team';
 import { MatchDto } from '@/types/match';
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -15,7 +15,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Dashboard({ favoriteTeams, matchData  }: { favoriteTeams: Team[], matchData: MatchDto[] }) {
+export default function Dashboard({ favoriteTeams, matchData  }: { favoriteTeams: TeamWithVenue[], matchData: MatchDto[] }) {
 
     console.log('Favorite teams data received in Dashboard component:', favoriteTeams);
     return (

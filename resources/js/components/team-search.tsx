@@ -3,10 +3,10 @@ import axios from 'axios'
 import { useForm } from '@inertiajs/react'
 import favoriteTeamsRoutes from '@/routes/favorite-teams'
 import { Button } from '@/components/ui/button'
-import { Team } from '@/types/team'
+import { TeamWithVenue } from '@/types/team'
 
 interface Props {
-    favoriteTeams: Team[]
+    favoriteTeams: TeamWithVenue[]
 }
 
 type FavoriteTeamForm = {
@@ -15,14 +15,14 @@ type FavoriteTeamForm = {
 
 const TeamSearch: React.FC<Props> = ({ favoriteTeams }) => {
     const [query, setQuery] = useState('')
-    const [results, setResults] = useState<Team[]>([])
+    const [results, setResults] = useState<TeamWithVenue[]>([])
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const favCount = favoriteTeams.length
     const favoriteForm = useForm<FavoriteTeamForm>({ team_id: null })
 
     const favoriteIds = useMemo(
-        () => new Set(favoriteTeams.map(team => team.id)),
+        () => new Set(favoriteTeams.map(team => team.team.id)),
         [favoriteTeams]
     )
 
@@ -52,10 +52,10 @@ const TeamSearch: React.FC<Props> = ({ favoriteTeams }) => {
         }
     }
 
-    const handleAddFavorite = (team: Team) => {
-        if (favoriteIds.has(team.id)) return
-        favoriteForm.setData('team_id', team.id)
-        favoriteForm.post(favoriteTeamsRoutes.store.url(team.id), { preserveScroll: true })
+    const handleAddFavorite = (team: TeamWithVenue) => {
+        if (favoriteIds.has(team.team.id)) return
+        favoriteForm.setData('team_id', team.team.id)
+        favoriteForm.post(favoriteTeamsRoutes.store.url(team.team.id), { preserveScroll: true })
     }
 
     return (
@@ -85,17 +85,17 @@ const TeamSearch: React.FC<Props> = ({ favoriteTeams }) => {
                 {results.length === 0 && !loading && query && <p>No teams found.</p>}
 
                 {results.map(team => {
-                    const isFavorite = favoriteIds.has(team.id)
+                    const isFavorite = favoriteIds.has(team.team.id)
                     return (
                         <div
-                            key={team.id}
+                            key={team.team.id}
                             className="border rounded-lg p-4 flex items-center justify-between"
                         >
                             <div className="flex items-center gap-3">
-                                <img src={team.logo} alt={team.name} className="w-8 h-8" />
+                                <img src={team.team.logo} alt={team.team.name} className="w-8 h-8" />
                                 <div>
-                                    <p className="font-semibold">{team.name}</p>
-                                    <p className="text-sm text-gray-500">{team.country}</p>
+                                    <p className="font-semibold">{team.team.name}</p>
+                                    <p className="text-sm text-gray-500">{team.team.country}</p>
                                 </div>
                             </div>
 

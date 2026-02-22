@@ -7,5 +7,9 @@ export interface Team {
     logo: string;
     country: string;
     founded: number;
-    venue: Venue | null;
 }
+export interface TeamWithVenue  {
+    venue: Venue;
+    team: Team;
+}
+
