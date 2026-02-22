@@ -60,10 +60,10 @@ const MatchesList: React.FC<MatchesListProps> = ({ matches }) => {
                     {expandedMatch === match.id && (
                         <div className="mt-4 text-sm space-y-2">
                             <p>
-                                <strong>League:</strong> {match.league.name} ({match.league.country})
+                                <strong>League:</strong> {match.league?.name ?? 'Unknown League'} ({match.league?.country ?? 'N/A'})
                             </p>
                             <p>
-                                <strong>Round:</strong> {match.league.round}
+                                <strong>Round:</strong> {match.league?.round ?? 'N/A'}
                             </p>
                             <p>
                                 <strong>Date:</strong>{' '}
@@ -72,15 +72,15 @@ const MatchesList: React.FC<MatchesListProps> = ({ matches }) => {
                                     : 'Unknown date'}
                             </p>
                             <p>
-                                <strong>Status:</strong> {match.status}
+                                <strong>Status:</strong> {match.status ?? 'Unknown'}
                             </p>
                             <p>
-                                <strong>Venue:</strong> {match.venue.name} – {match.venue.city}
+                                <strong>Venue:</strong> {match.venue?.name ?? 'No venue'} – {match.venue?.city ?? 'Unknown city'}
                             </p>
 
                             <div className="pt-2">
                                 <strong>Halftime:</strong>{' '}
-                                {match.score.halftime.home ?? '-'} : {match.score.halftime.away ?? '-'}
+                                {match.score?.halftime?.home ?? '-'} : {match.score?.halftime?.away ?? '-'}
                             </div>
                         </div>
                     )}
