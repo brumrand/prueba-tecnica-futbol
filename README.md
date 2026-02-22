@@ -39,7 +39,7 @@ La aplicación sigue una arquitectura que intenta separar las preocupaciones del
     ```bash
     cp .env.example .env
     ```
-    Asegúrate de configurar la conexión a la base de datos (los valores por defecto en `docker-compose.yml` son `mysql`, `sail`, `password`). Lo más importante es configurar tu API Key de Football-API:
+    Asegúrate de configurar la conexión a la base de datos. Lo más importante es configurar tu API Key de Football-API:
     ```
     FOOTBALL_API_KEY=tu_api_key
     FOOTBALL_API_HOST=https://v3.football.api-sports.io
