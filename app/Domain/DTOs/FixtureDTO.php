@@ -13,7 +13,7 @@ final readonly class PeriodsDTO
 final readonly class FixtureVenueDTO
 {
     public function __construct(
-        public int $id,
+        public int|Null $id,
         public string $name,
         public string $city,
     ) {}

@@ -9,7 +9,7 @@ final readonly class LeagueDTO
         public string $name,
         public string $country,
         public string $logo,
-        public string $flag,
+        public string | Null $flag,
         public int $season,
         public string $round,
     ) {}
