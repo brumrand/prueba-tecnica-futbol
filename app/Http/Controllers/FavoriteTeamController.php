@@ -20,7 +20,7 @@ class FavoriteTeamController extends Controller
         return redirect()->back();
     }
 
-        public function add(Request $request, int $teamId)
+        public function store(Request $request, int $teamId)
     {
         $user = Auth::user();
         $this->favoriteTeamService->addFavoriteTeam($user->id, $teamId);

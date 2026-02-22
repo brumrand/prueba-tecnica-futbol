@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Client\Response;
 use Illuminate\Http\Client\RequestException;
 use App\External\FootballApi\Responses\FootballApiResponse;
-final class FootballClient
+class FootballClient
 {
     private string $baseUrl;
     private string $apiKey;

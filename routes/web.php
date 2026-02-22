@@ -15,7 +15,7 @@ Route::get('/', function () {
 
 Route::get('dashboard', DashboardController::class)->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::post('favorite-teams/{teamId}', [FavoriteTeamController::class, 'add'])
+Route::post('favorite-teams/{teamId}', [FavoriteTeamController::class, 'store'])
     ->middleware(['auth'])
     ->name('favorite-teams.store');
 
