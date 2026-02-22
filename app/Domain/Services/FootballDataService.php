@@ -25,8 +25,14 @@ class FootballDataService
         $response = $this->client->getTeamsByName($name);
 
         $this->ensureSuccess($response, 'getTeamsByName');
-
-        return TeamMapper::fromApi($response->data);
+        $teams = [];
+        Log::info('API response for getTeamsByName', ['response' => $response]);
+        foreach ($response->data as $item) {      
+            Log::info('Mapping team from API item', ['item' => $item]);
+        $team = TeamMapper::fromApi($item);
+        $teams[] = $team['team'];
+        }
+        return $teams; 
     }
 
     public function getTeamById(int $teamId): ?TeamDTO

@@ -41,6 +41,7 @@ const TeamSearch: React.FC<Props> = ({ favoriteTeams }) => {
 
             // 🔹 Soporte para array directo
             const data = response.data
+            console.log('Search response:', data)
             setResults(Array.isArray(data) ? data : data.results ?? [])
         } catch (err: any) {
             console.error('Error searching teams:', err)

@@ -22,7 +22,6 @@ final class MatchMapper
      */
     public static function fromApi(array $response): array
     {
-        Log::info('Mapping matches from API response', ['response' => $response]);
         return collect($response)
             ->map(fn (array $item) => self::mapMatch($item))
             ->all();

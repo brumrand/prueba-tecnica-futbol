@@ -13,7 +13,7 @@ final class TeamMapper
          * La API devuelve un array en response[]
          * Para este endpoint sabemos que viene 1 solo equipo
          */
-        $data = $response[0];
+        $data = $response;
 
         return [
             'team' => new TeamDTO(

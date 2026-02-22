@@ -7,9 +7,9 @@ final readonly class TeamDTO
     public function __construct(
         public int $id,
         public string $name,
-        public string $code,
+        public string | Null $code,
         public string $country,
-        public int $founded,
+        public int|null $founded,
         public bool $national,
         public string $logo,
     ) {}
