@@ -78,7 +78,7 @@ class FootballDataService
             }
         }
         usort($results, function ($a, $b) {
-            return strtotime($a->fixture->date) <=> strtotime($b->fixture->date);
+            return strtotime($b->fixture->date) <=> strtotime($a->fixture->date);
         });
         return $results;
     }
