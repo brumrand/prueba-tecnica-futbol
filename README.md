@@ -60,7 +60,7 @@ La aplicación sigue una arquitectura que intenta separar las preocupaciones del
 -   Composer
 -   Node.js & npm
 -   Docker y Docker Compose (para la instalación con Docker)
--   Una base de datos (MySQL, PostgreSQL, etc.)
+-   Una base de datos PostgreSQL
 
 1.  **Clonar el repositorio:**
     ```bash
@@ -72,6 +72,7 @@ La aplicación sigue una arquitectura que intenta separar las preocupaciones del
     ```bash
     composer install
     npm install
+    npm run build
     ```
 
 3.  **Configurar el entorno:**
@@ -98,7 +99,8 @@ La aplicación sigue una arquitectura que intenta separar las preocupaciones del
 
 4.  **Ejecutar migraciones:**
     ```bash
-    php artisan migrate
+    php artisan migrate -> lanzar las migraciones de base de datos
+    php artisan storage:link -> enlazar la carpeta storage con public para poder ver las imágenes
     ```
 
 ## Uso
@@ -106,6 +108,7 @@ La aplicación sigue una arquitectura que intenta separar las preocupaciones del
 1.  **Iniciar los servidores:**
     -   Servidor de Laravel: `php artisan serve`
     -   Servidor de Vite: `npm run dev`
+    -   O 'composer run dev' para ambos
 
 2.  **Acceder a la aplicación:**
     Abre tu navegador y ve a `http://localhost:8000` (o la URL que te indique `php artisan serve`).
