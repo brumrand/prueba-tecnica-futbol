@@ -74,7 +74,40 @@ class DashboardTest extends TestCase
                 ->where('favoriteTeams.1.team.id', $teamData2['team']->id)
                 ->where('favoriteTeams.1.team.name', $teamData2['team']->name)
                 ->where('favoriteTeams.1.venue.name', $teamData2['venue']->name)
-                ->has('matchData', 2); // Asserting based on the fake data from the controller
+                ->has('matchData', 0);
         });
+    }
+
+    public function test_it_can_search_teams_by_name_and_they_are_passed_to_the_view(): void
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $searchQuery = 'test';
+        $expectedTeams = [
+            ['id' => 1, 'name' => 'Test Team 1'],
+            ['id' => 2, 'name' => 'Test Team 2'],
+        ];
+
+        $footballDataServiceMock = $this->mock(FootballDataService::class);
+        $footballDataServiceMock->shouldReceive('getTeamsByName')
+            ->once()
+            ->with($searchQuery)
+            ->andReturn($expectedTeams);
+        
+        $footballDataServiceMock->shouldReceive('getTeamsMatches')->andReturn([]);
+        $footballDataServiceMock->shouldReceive('getFavoriteTeams')->andReturn([]);
+        $footballDataServiceMock->shouldReceive('getTeamById')->andReturn(null);
+
+        $response = $this->get(route('dashboard', ['search' => $searchQuery]));
+
+        $response->assertStatus(200);
+
+        $response->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->component('dashboard')
+                ->has('searchedTeams', 2)
+                ->where('searchedTeams', $expectedTeams)
+        );
     }
 }
