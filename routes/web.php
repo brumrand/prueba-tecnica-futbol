@@ -19,10 +19,6 @@ Route::post('favorite-teams/{teamId}', [FavoriteTeamController::class, 'store'])
     ->middleware(['auth'])
     ->name('favorite-teams.store');
 
-Route::get('search-by-name', [TeamController::class, 'searchByName'])
-    ->middleware(['auth'])
-    ->name('teams.searchByName');
-
 Route::delete(
     'favorite-teams/{teamId}',
     [FavoriteTeamController::class, 'destroy']

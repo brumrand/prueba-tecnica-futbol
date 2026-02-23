@@ -1,110 +1,139 @@
-import React, { useMemo, useState } from 'react'
-import axios from 'axios'
-import { useForm } from '@inertiajs/react'
+import { router, useForm } from '@inertiajs/react'
+import React, { useMemo } from 'react'
+
+import { dashboard } from '@/routes'
 import favoriteTeamsRoutes from '@/routes/favorite-teams'
+import type { Team, TeamWithVenue } from '@/types/team'
+
 import { Button } from '@/components/ui/button'
-import { Team, TeamWithVenue } from '@/types/team'
 
 interface Props {
     favoriteTeams: TeamWithVenue[]
+    initialResults: Team[]
+    initialQuery: string
 }
 
-type FavoriteTeamForm = {
-    team_id: number | null
-}
-
-const TeamSearch: React.FC<Props> = ({ favoriteTeams }) => {
-    const [query, setQuery] = useState('')
-    const [results, setResults] = useState<Team[]>([])
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState<string | null>(null)
+const TeamSearch: React.FC<Props> = ({
+    favoriteTeams,
+    initialResults,
+    initialQuery,
+}) => {
     const favCount = favoriteTeams.length
-    const favoriteForm = useForm<FavoriteTeamForm>({ team_id: null })
+    const favoriteForm = useForm<{ team_id: number | null }>({ team_id: null })
+    const {
+        data,
+        setData,
+        get: search,
+        processing: loading,
+        errors,
+    } = useForm({
+        search: initialQuery || '',
+    })
 
     const favoriteIds = useMemo(
         () => new Set(favoriteTeams.map(team => team.team.id)),
-        [favoriteTeams]
+        [favoriteTeams],
     )
 
-    const handleSearch = async (e: React.SubmitEvent) => {
+    const handleSearch = (e: React.SubmitEvent) => {
         e.preventDefault()
-        if (!query) return
-
-        setLoading(true)
-        setError(null)
-
-        try {
-            const response = await axios.get('/search-by-name', {
-                params: { name: query },
-                headers: { Accept: 'application/json' },
-            })
-
-            // 🔹 Soporte para array directo
-            const data = response.data
-            console.log('Search response:', data)
-            setResults(Array.isArray(data) ? data : data.results ?? [])
-        } catch (err: any) {
-            console.error('Error searching teams:', err)
-            setError('Failed to fetch teams. Try again.')
-            setResults([])
-        } finally {
-            setLoading(false)
+        const options = {
+            preserveState: true,
+            preserveScroll: true,
         }
+        search(dashboard().url, options)
     }
 
     const handleAddFavorite = (team: Team) => {
         if (favoriteIds.has(team.id)) return
         favoriteForm.setData('team_id', team.id)
-        favoriteForm.post(favoriteTeamsRoutes.store.url(team.id), { preserveScroll: true })
+        favoriteForm.post(favoriteTeamsRoutes.store.url(team.id), {
+            preserveScroll: true,
+        })
     }
 
+    React.useEffect(() => {
+        const down = (e: KeyboardEvent) => {
+            if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+                e.preventDefault()
+                router.get(
+                    dashboard().url,
+                    {},
+                    {
+                        preserveState: true,
+                        preserveScroll: true,
+                    },
+                )
+            }
+        }
+        document.addEventListener('keydown', down)
+        return () => document.removeEventListener('keydown', down)
+    }, [])
+
     return (
-        <div className="space-y-6 h-full">
-            <h2 className='w-full text-center font-bold'>Team Searcher</h2>
+        <div className="h-full space-y-6">
+            <h2 className="w-full text-center font-bold">Team Searcher</h2>
             <form onSubmit={handleSearch} className="flex gap-2">
                 <input
                     type="text"
-                    value={query}
-                    onChange={e => setQuery(e.target.value)}
+                    value={data.search}
+                    onChange={e => setData('search', e.target.value)}
                     placeholder="Search team by name..."
-                    className="border rounded px-3 py-2 w-full"
+                    className="w-full rounded border px-3 py-2"
                 />
-                <Button type="submit" disabled={loading || !query}>
+                <Button type="submit" disabled={loading || !data.search}>
                     {loading ? 'Searching...' : 'Search'}
                 </Button>
             </form>
 
-            {error && <p className="text-red-500">{error}</p>}
+            {errors.search && <p className="text-red-500">{errors.search}</p>}
 
-            <div className="space-y-3 max-h-[60vh] overflow-y-auto pr-2">
+            <div className="max-h-[60vh] space-y-3 overflow-y-auto pr-2">
                 {favCount >= 5 && (
                     <p className="text-yellow-600">
-                        You have reached the maximum of 5 favorite teams. Remove one to add more.
+                        You have reached the maximum of 5 favorite teams. Remove
+                        one to add more.
                     </p>
                 )}
-                {results.length === 0 && !loading && query && <p>No teams found.</p>}
+                {initialResults.length === 0 && !loading && initialQuery && (
+                    <p>No teams found.</p>
+                )}
 
-                {results.map(searchedTeam => {
+                {initialResults.map(searchedTeam => {
                     const isFavorite = favoriteIds.has(searchedTeam.id)
                     return (
                         <div
                             key={searchedTeam.id}
-                            className="border rounded-lg p-4 flex items-center justify-between"
+                            className="flex items-center justify-between rounded-lg border p-4"
                         >
                             <div className="flex items-center gap-3">
-                                <img src={searchedTeam.logo} alt={searchedTeam.name} className="w-8 h-8" />
+                                <img
+                                    src={searchedTeam.logo}
+                                    alt={searchedTeam.name}
+                                    className="h-8 w-8"
+                                />
                                 <div>
-                                    <p className="font-semibold">{searchedTeam.name}</p>
-                                    <p className="text-sm text-gray-500">{searchedTeam.country}</p>
+                                    <p className="font-semibold">
+                                        {searchedTeam.name}
+                                    </p>
+                                    <p className="text-sm text-gray-500">
+                                        {searchedTeam.country}
+                                    </p>
                                 </div>
                             </div>
 
                             <Button
                                 onClick={() => handleAddFavorite(searchedTeam)}
-                                disabled={isFavorite || favoriteForm.processing || favCount >= 5}
+                                disabled={
+                                    isFavorite ||
+                                    favoriteForm.processing ||
+                                    favCount >= 5
+                                }
                                 variant={isFavorite ? 'secondary' : 'default'}
                             >
-                                {isFavorite ? 'Already added' : 'Add to favorites'}
+                                {isFavorite
+                                    ? 'Already added'
+                                    : 'Add to favorites'}
                             </Button>
                         </div>
                     )

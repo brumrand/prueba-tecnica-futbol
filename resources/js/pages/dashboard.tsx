@@ -1,23 +1,35 @@
-import { Head } from '@inertiajs/react';
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
-import AppLayout from '@/layouts/app-layout';
-import type { BreadcrumbItem } from '@/types';
-import { dashboard } from '@/routes';
-import FavoriteTeams from '@/components/favorite-teams';
-import MatchesList from '@/components/maches-list';
-import TeamSearch from '@/components/team-search';
-import { TeamWithVenue } from '@/types/team';
-import { MatchDto } from '@/types/match';
+import { Head } from '@inertiajs/react'
+import { PlaceholderPattern } from '@/components/ui/placeholder-pattern'
+import AppLayout from '@/layouts/app-layout'
+import type { BreadcrumbItem } from '@/types'
+import { dashboard } from '@/routes'
+import FavoriteTeams from '@/components/favorite-teams'
+import MatchesList from '@/components/maches-list'
+import TeamSearch from '@/components/team-search'
+import { Team, TeamWithVenue } from '@/types/team'
+import { MatchDto } from '@/types/match'
+
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Dashboard',
         href: dashboard().url,
     },
-];
+]
 
-export default function Dashboard({ favoriteTeams, matchData  }: { favoriteTeams: TeamWithVenue[], matchData: MatchDto[] }) {
+interface Props {
+    favoriteTeams: TeamWithVenue[]
+    matchData: MatchDto[]
+    searchedTeams: Team[]
+    search: string
+}
 
-    console.log('Favorite teams data received in Dashboard component:', favoriteTeams);
+export default function Dashboard({
+    favoriteTeams,
+    matchData,
+    searchedTeams,
+    search,
+}: Props) {
+    console.log('Favorite teams data received in Dashboard component:', favoriteTeams)
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
@@ -28,13 +40,17 @@ export default function Dashboard({ favoriteTeams, matchData  }: { favoriteTeams
                     </div>
 
                     <div className="relative aspect-video max-h-[60vh] overflow-y-auto pr-2 rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                        <TeamSearch favoriteTeams={favoriteTeams} />
+                        <TeamSearch
+                            favoriteTeams={favoriteTeams}
+                            initialResults={searchedTeams}
+                            initialQuery={search}
+                        />
                     </div>
                 </div>
                 <div className="relative min-h-[100vh] flex-1  overflow-y-auto pr-2 rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
-                   <MatchesList matches={matchData} favTeams={favoriteTeams} />
+                    <MatchesList matches={matchData} favTeams={favoriteTeams} />
                 </div>
             </div>
         </AppLayout>
-    );
+    )
 }

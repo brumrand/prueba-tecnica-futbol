@@ -32,9 +32,16 @@ class DashboardController extends Controller
             }
         }
 
+        $searchQuery = $request->query('search');
+        $searchedTeams = $searchQuery
+            ? $this->footballDataService->getTeamsByName($searchQuery)
+            : [];
+
         return Inertia::render('dashboard', [
             'favoriteTeams' => $teamsData,
             'matchData'     => $matchData,
+            'searchedTeams' => $searchedTeams,
+            'search'        => $searchQuery,
         ]);
     }
 

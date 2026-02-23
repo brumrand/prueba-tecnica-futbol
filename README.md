@@ -4,11 +4,11 @@ Este es un sistema de seguimiento de equipos de fútbol que permite a los usuari
 
 ## Features
 
--   **Autenticación de usuarios:** Registro e inicio de sesión.
+-   **Autenticación de usuarios:** Registro e inicio de sesión. Se usan los métodos nativos de Laravel para la autenticación(Fortify), empleando los métodos Bcrypt o Argon2, que generan un salt aleatorio único por cada contraseña (el cual se incluye dentro del mismo hash almacenado en la columna password). En cuanto a está última se reliza mediante cookies de sesión. 
 -   **Búsqueda de equipos:** Búsqueda de equipos de fútbol por nombre.
 -   **Gestión de favoritos:** Los usuarios pueden agregar y eliminar equipos de su lista de favoritos.
 -   **Dashboard:** Visualización de los equipos favoritos y sus partidos.
--   **Partidos:** Muestra los últimos y próximos partidos de los equipos favoritos.
+-   **Partidos:** Muestra los  partidos de los equipos favoritos de la temporada 2024 en orden descendente por antiguedad.
 
 ## Arquitectura y Decisiones de Diseño
 
@@ -16,13 +16,15 @@ La aplicación sigue una arquitectura que intenta separar las preocupaciones del
 
 -   **Backend:** Laravel 12. 
 -   **Frontend:** React con TypeScript y Vite.js.
--   **Inertia.js:** Para conectar el backend de Laravel con el frontend de React, se utiliza Inertia.js. Esta elección permite construir una aplicación de página única (SPA) sin la complejidad de manejar una API RESTful completa y la autenticación de la misma. Inertia permite renderizar componentes de React directamente desde los controladores de Laravel.
+-   **Inertia.js:** Para conectar el backend de Laravel con el frontend de React, se utiliza Inertia.js. Esta elección permite construir una aplicación de página única (SPA) sin la complejidad de manejar una API RESTful completa, la autenticación de la misma y el enrutado extra.
 -   **Estructura de Dominio:** Dentro de `app/Domain`, se encuentran los Servicios y DTOs (Data Transfer Objects).
     -   **Services:** Contienen la lógica de negocio principal de la aplicación (e.g., `FavoriteTeamService`, `FootballDataService`).
     -   **DTOs:** Se utilizan para transferir datos de una capa a otra de forma estructurada y con tipado estricto.
 -   **Capa Externa (API):** En `app/External`, se encuentra la lógica para interactuar con la API externa de datos de fútbol. Se utiliza un `FootballClient` para encapsular las llamadas a la API y `Mappers` para transformar las respuestas de la API en los DTOs del dominio.
 
-
+-   **Infraestructura y Servidor:** Se ha optado por **Laravel Octane** funcionando sobre **FrankenPHP**. 
+    -   Esta configuración sustituye el stack tradicional (Nginx + PHP-FPM) por un servidor de aplicaciones de alto rendimiento escrito en Go.
+    -   **Beneficio:** Al mantener el framework en memoria entre peticiones, se reduce drásticamente la latencia y se mejora el rendimiento general del sistema en entornos Dockerizados.
 
 ## Instalación
 
@@ -119,5 +121,4 @@ O si prefieres ejecutar phpunit directamente:
 ```bash
 ./vendor/bin/phpunit
 ```
-
 Asegúrate de tener un archivo `.env.testing` configurado para los tests. Puedes copiar el que está en el repositorio.
